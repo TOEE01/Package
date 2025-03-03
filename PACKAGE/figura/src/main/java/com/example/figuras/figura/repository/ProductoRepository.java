@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 @Repository
-public interface ProductoRepository extends JpaRepository< Producto, Long> {
+public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     Optional<Producto> findByNombre(String nombre);
     List<Producto> findByNombreContainingIgnoreCase(String nombre);

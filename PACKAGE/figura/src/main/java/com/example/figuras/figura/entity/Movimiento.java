@@ -1,13 +1,14 @@
 package com.example.figuras.figura.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.example.figuras.figura.Enum.TipoMovimiento;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "movimientos_inventario")
+@Table(name = "movimientos")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,28 +19,26 @@ public class Movimiento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne  // Relación muchos a uno con Producto
-    @JoinColumn(name = "producto_id", nullable = false) // Llave foránea obligatoria
+    @ManyToOne  // Relación con Producto
+    @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
-    @ManyToOne  // Relación muchos a uno con Usuario
-    @JoinColumn(name = "usuario_id", nullable = false) // Llave foránea obligatoria
+    @Enumerated(EnumType.STRING) // Para asegurar que solo se use "ENTRADA" o "SALIDA"
+    @Column(nullable = false)
+    private TipoMovimiento tipo;
+
+    @Column(nullable = false)
+    private int cantidad;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime fecha;
+
+    @ManyToOne  // Relación con Usuario
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
-
-    @Column(nullable = false)
-    private int cantidad;  // Cantidad del movimiento
-
-    @Column(nullable = false)
-    private BigDecimal precioUnitario;  // Precio en el momento del movimiento
-
-    @Column(nullable = false)
-    private String tipoMovimiento;  // "ENTRADA" o "SALIDA"
-
-    @Column(updatable = false)
-    private LocalDateTime fechaMovimiento;
 
     @PrePersist
     protected void onCreate() {
-        this.fechaMovimiento = LocalDateTime.now();
+        this.fecha = LocalDateTime.now();
     }
 }

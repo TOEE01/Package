@@ -28,6 +28,9 @@ public class Producto{
 
     @Column(nullable =  false)
     private Long precio;
+
+    @Column(nullable =  false)
+    private int cantidad;
     
     @Column(nullable =  false)
     private Long stock;

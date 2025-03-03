@@ -38,6 +38,7 @@ public class ProductoService {
             producto.setStock(productoActualizado.getStock());
             producto.setStock_minimo(productoActualizado.getStock_minimo());
             producto.setCategoria(productoActualizado.getCategoria());
+            producto.setCantidad(productoActualizado.getCantidad());
             return productoRepository.save(producto);
         }).orElseThrow(() -> new RuntimeException("Producto no encontrado")) ;
     }
