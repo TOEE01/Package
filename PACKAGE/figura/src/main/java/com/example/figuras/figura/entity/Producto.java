@@ -30,7 +30,7 @@ public class Producto{
     private Long precio;
 
     @Column(nullable =  false)
-    private int cantidad;
+    private Integer cantidad;
     
     @Column(nullable =  false)
     private Long stock;

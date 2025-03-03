@@ -3,7 +3,10 @@ package com.example.figuras.figura.services;
 import com.example.figuras.figura.entity.Producto;
 import com.example.figuras.figura.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +34,7 @@ public class ProductoService {
     }
 
     public Producto actualizaProducto(Long id, Producto productoActualizado){
-        return productoRepository.findById(id).map( producto ->{
+        return productoRepository.findById(id).map(producto -> {
             producto.setNombre(productoActualizado.getNombre());
             producto.setPrecio(productoActualizado.getPrecio());
             producto.setDescripcion(productoActualizado.getDescripcion());
@@ -40,7 +43,7 @@ public class ProductoService {
             producto.setCategoria(productoActualizado.getCategoria());
             producto.setCantidad(productoActualizado.getCantidad());
             return productoRepository.save(producto);
-        }).orElseThrow(() -> new RuntimeException("Producto no encontrado")) ;
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
     }
 
     public void eliminarProduto(Long id){//Eliminar el producto mediante el id del producto
