@@ -5,6 +5,14 @@
 
 package com.example.figuras.figura.entity;
 
+import java.util.Collection;
+import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
+
 /**
   *
   * @author apriz
@@ -19,7 +27,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Usuario implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +44,35 @@ public class Usuario {
 
     @Column(nullable = false)
     private String rol;
+
+    @Override
+    public String getUsername(){
+      return nombre;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+      return List.of(new SimpleGrantedAuthority("ROL_" + rol));
+    }
+
+    @Override
+    public boolean isAccountNonExpired(){
+      return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked(){
+      return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired(){
+      return true;
+    }
+
+    @Override
+    public boolean isEnabled(){
+      return true;
+    }
 }
 
