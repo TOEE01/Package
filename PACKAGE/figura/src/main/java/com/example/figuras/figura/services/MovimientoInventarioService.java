@@ -37,20 +37,24 @@ public class MovimientoInventarioService {
     public Movimiento guardarMovimiento(Movimiento movimiento){
         Producto producto = movimiento.getProducto();
 
-        if(producto == null){
-            throw new IllegalArgumentException("El producto no puede ser nulo");
-        }
+    if (producto == null) {
+        throw new IllegalArgumentException("El producto no puede ser nulo");
+    }
+    producto = productoRepository.findById(producto.getId())
+            .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-        if(movimiento.getTipo() == TipoMovimiento.ENTRADA){
-            producto.setCantidad(producto.getCantidad() + movimiento.getCantidad());
-        }else if(movimiento.getTipo() == TipoMovimiento.SALIDA){
-            if(producto.getCantidad() < movimiento.getCantidad()){
-                throw new IllegalArgumentException("No hay suficiente Stock para realizar la salida");
-            }
-            producto.setStock(producto.getStock() - movimiento.getCantidad());
+    if (movimiento.getTipo() == TipoMovimiento.ENTRADA) {
+        producto.setStock(producto.getStock() + movimiento.getCantidad());
+    } else if (movimiento.getTipo() == TipoMovimiento.SALIDA) {
+        if (producto.getStock() < movimiento.getCantidad()) {
+            throw new IllegalArgumentException("No hay suficiente stock para realizar la salida");
         }
-        productoRepository.save(producto);
-        return movimientoRepository.save(movimiento);
+        producto.setStock(producto.getStock() - movimiento.getCantidad());
+    }
+
+    productoRepository.save(producto);
+
+    return movimientoRepository.save(movimiento);
 
 
     }

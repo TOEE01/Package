@@ -33,7 +33,7 @@ public class Producto{
     private Integer cantidad;
     
     @Column(nullable =  false)
-    private Long stock;
+    private Integer stock;
 
     @Column(nullable =  false)
     private Long stock_minimo;
