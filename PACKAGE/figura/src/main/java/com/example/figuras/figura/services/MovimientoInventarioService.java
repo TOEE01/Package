@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.figuras.figura.Enum.TipoMovimiento;
 import com.example.figuras.figura.entity.Movimiento;
@@ -26,13 +28,16 @@ public class MovimientoInventarioService {
         return movimientoRepository.findAll();
     }
 
+
     public Optional<Movimiento> obtenerPorId(Long id) {
         return movimientoRepository.findById(id);
     }
 
+
     public List<Movimiento> obtenerPortipo(String tipo){
         return movimientoRepository.findByTipo(tipo); 
     }
+
 
     public Movimiento guardarMovimiento(Movimiento movimiento){
         Producto producto = movimiento.getProducto();
@@ -59,16 +64,17 @@ public class MovimientoInventarioService {
 
     }
 
-    /*public Movimiento guardarMovimiento(Movimiento movimiento) {
-        if (movimiento.getProducto() == null) {
-            throw new IllegalArgumentException("El producto no puede ser nulo");
-        }
-    
-        // Solo se guarda el movimiento sin modificar el producto
-        return movimientoRepository.save(movimiento);
-    }*/
-
     public void eliminarMovimiento(Long id){
         movimientoRepository.deleteById(id);
+    }
+
+    public Movimiento actualizarMovimiento(Long id, Movimiento movimientoActualizado){
+        return movimientoRepository.findById(id).map(movimiento -> {
+            movimiento.setUsuario(movimientoActualizado.getUsuario());
+            movimiento.setProducto(movimientoActualizado.getProducto());
+            movimiento.setCantidad(movimientoActualizado.getCantidad());
+            movimiento.setTipo(movimientoActualizado.getTipo());
+            return movimientoRepository.save(movimiento);
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Producto no econtrado"));
     }
 }
