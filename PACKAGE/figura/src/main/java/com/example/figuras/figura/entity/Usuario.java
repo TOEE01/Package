@@ -45,6 +45,7 @@ public class Usuario implements UserDetails{
     @Column(nullable = false)
     private String rol;
 
+    // Spring Security methods
     @Override
     public String getUsername(){
       return nombre;

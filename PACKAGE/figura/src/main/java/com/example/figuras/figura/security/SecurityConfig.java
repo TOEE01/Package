@@ -20,12 +20,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+        .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**").hasRole("ADMIN")  // Solo para admin
                 .requestMatchers("/user/**").hasRole("USER")   // Solo para usuarios normales
                 .anyRequest().authenticated()
             )
-            .formLogin(withDefaults())  // Nueva forma de habilitar el login
+            .formLogin(withDefaults())
+            .httpBasic(withDefaults())   // Nueva forma de habilitar el login
             .logout(withDefaults());  // Nueva forma de habilitar logout
 
         return http.build();

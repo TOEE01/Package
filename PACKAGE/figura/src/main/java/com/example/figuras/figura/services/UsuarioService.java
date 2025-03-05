@@ -2,6 +2,9 @@ package com.example.figuras.figura.services;
 
 import com.example.figuras.figura.entity.Usuario;
 import com.example.figuras.figura.repository.UsuarioRepository;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,7 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
 
+    
     public UsuarioService(UsuarioRepository usuariorepository, PasswordEncoder passwordEncoder) {
         this.usuariorepository = usuariorepository;
         this.passwordEncoder = passwordEncoder;

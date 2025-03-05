@@ -23,7 +23,7 @@ public class Movimiento {
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
-    @Enumerated(EnumType.STRING) // Para asegurar que solo se use "ENTRADA" o "SALIDA"
+    @Enumerated(EnumType.STRING) //Para asegurar que solo se use "ENTRADA" o "SALIDA"
     @Column(nullable = false)
     private TipoMovimiento tipo;
 

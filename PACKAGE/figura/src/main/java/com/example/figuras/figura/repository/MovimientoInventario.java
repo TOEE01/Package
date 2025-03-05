@@ -9,4 +9,6 @@ import com.example.figuras.figura.entity.Movimiento;
 public interface MovimientoInventario extends JpaRepository <Movimiento, Long>{
     List<Movimiento> findByTipo(String tipo);
     
+    
 }
+
