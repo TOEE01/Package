@@ -1,51 +1,44 @@
-package com.example.figuras.figura.security;
+/*package com.example.figuras.figura.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
-@Configuration 
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/**").hasRole("ADMIN")  // Solo para admin
-                .requestMatchers("/user/**").hasRole("USER")   // Solo para usuarios normales
+                .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll() // permitir crear usuario sin login
+                .requestMatchers("/api/auth/**").permitAll() // login sin autenticación previa
                 .anyRequest().authenticated()
             )
-            .formLogin(withDefaults())
-            .httpBasic(withDefaults())   // Nueva forma de habilitar el login
-            .logout(withDefaults());  // Nueva forma de habilitar logout
+            .cors(cors -> {}) // habilita CORS
+            .httpBasic(httpBasic -> {}); // usa autenticación básica
 
         return http.build();
     }
 
-        @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-            .username("admin")
-            .password(passwordEncoder().encode("123456"))  // Contraseña encriptada
-            .roles("ADMIN")
-            .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
-
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Para codificar las contraseñas
+    public WebMvcConfigurer corsConfigurer() { // habilita CORS global
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173") // origen del frontend
+                        .allowedMethods("*")
+                        .allowedHeaders("*");
+            }
+        };
     }
 }
+*/

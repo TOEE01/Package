@@ -6,7 +6,6 @@ import com.example.figuras.figura.repository.UsuarioRepository;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +15,7 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
 
     public List<Usuario> obtenerTodos() {
         return usuarioRepository.findAll();
@@ -30,6 +30,7 @@ public class UsuarioService {
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
+        // Guardar directamente sin cifrar la contraseña
         return usuarioRepository.save(usuario);
     }
 
@@ -37,20 +38,41 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    private final UsuarioRepository usuariorepository;
-
-    private final PasswordEncoder passwordEncoder;
-
-    
-    public UsuarioService(UsuarioRepository usuariorepository, PasswordEncoder passwordEncoder) {
-        this.usuariorepository = usuariorepository;
-        this.passwordEncoder = passwordEncoder;
+    public Usuario actualizarUsuario(Long id, Usuario usuarioActualizado) {
+        Optional<Usuario> usuarioExistente = obtenerPorId(id);
+        if (usuarioExistente.isPresent()) {
+            Usuario usuario = usuarioExistente.get();
+            usuario.setNombre(usuarioActualizado.getNombre());
+            usuario.setEmail(usuarioActualizado.getEmail());
+            usuario.setRol(usuarioActualizado.getRol());
+            return usuarioRepository.save(usuario);
+        } else {
+            throw new RuntimeException("Usuario no encontrado con ID: " + id);
+        }
     }
 
-    public Usuario crearUsuario(Usuario usuario) {
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        return this.usuariorepository.save(usuario);
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email); 
     }
 
-    
+    public Usuario buscarPorRol(String rol){
+        return usuarioRepository.findByRol(rol);
+
+    }
 }
+/* 
+    public boolean verificarCredenciales(String email, String password) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email); // Asumiendo que tienes el método findByEmail en el repo
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            // Verificar si la contraseña ingresada coincide con la almacenada (cifrada)
+            return passwordEncoder.matches(password, usuario.getPassword());
+        }
+        return false; // El usuario no fue encontrado
+    }
+}
+*/
+/* 
+    public Optional<Usuario> obtenerPorEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }*/

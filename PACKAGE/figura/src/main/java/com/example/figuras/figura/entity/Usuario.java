@@ -5,11 +5,11 @@
 
 package com.example.figuras.figura.entity;
 
-import java.util.Collection;
-import java.util.List;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+//import java.util.Collection;
+//import java.util.List;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 
 
@@ -27,7 +27,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario implements UserDetails{
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +44,7 @@ public class Usuario implements UserDetails{
 
     @Column(nullable = false)
     private String rol;
-
+/* 
     // Spring Security methods
     @Override
     public String getUsername(){
@@ -74,6 +74,6 @@ public class Usuario implements UserDetails{
     @Override
     public boolean isEnabled(){
       return true;
-    }
+    }*/
 }
 
